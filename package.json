@@ -8,9 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "three": "latest"
+    "three": "^0.181.2"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
   }
 }
