@@ -5,7 +5,7 @@ export default function ToolsPopup({ onClose }) {
   const rawTools = {
     AI: [
       { name: "ChatGPT", logo: "chatgpt-6.svg", desc: "AI assistant for content, coding, and workflows." },
-      { name: "Google Gemini", logo: "Google-gemini-icon.png", desc: "Multimodal AI for creative and analytical tasks." },
+      { name: "Google Gemini", logo: "Google-gemini-icon.webp", desc: "Multimodal AI for creative and analytical tasks." },
       { name: "Claude", logo: "claude-logo.svg", desc: "Advanced AI model for deep reasoning and writing." },
     ],
 
@@ -15,7 +15,7 @@ export default function ToolsPopup({ onClose }) {
 
     Development: [
       { name: "VS Code", logo: "visual-studio-code-1.svg", desc: "Code editor for React, Next.js, and automation." },
-      { name: "Terminal", logo: "terminal.png", desc: "System & development command-line tool." },
+      { name: "Terminal", logo: "terminal.webp", desc: "System & development command-line tool." },
       { name: "PowerShell", logo: "powershell.svg", desc: "Windows-based automation and scripting." },
       { name: "Kali Linux", logo: "kali-1.svg", desc: "Security testing and penetration tools." },
 
@@ -27,11 +27,11 @@ export default function ToolsPopup({ onClose }) {
     ],
 
     Automation: [
-      { name: "n8n", logo: "n8n.png", desc: "Automation workflows and API integrations." },
+      { name: "n8n", logo: "n8n.webp", desc: "Automation workflows and API integrations." },
       { name: "Google Sheets", logo: "google-sheets-logo-icon.svg", desc: "Tracking, organizing data, automation triggers." },
       { name: "Google Forms", logo: "google-forms.svg", desc: "Lead capture integrated into automation flows." },
       { name: "Google Drive", logo: "drive-google.svg", desc: "Cloud storage integrated with automation processes." },
-      { name: "Pipedrive CRM", logo: "pipedrive.jpeg", desc: "Sales pipeline, leads, and workflow triggers." },      
+      { name: "Pipedrive CRM", logo: "pipedrive.webp", desc: "Sales pipeline, leads, and workflow triggers." },      
     ],
 
     Communication: [

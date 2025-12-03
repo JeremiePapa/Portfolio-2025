@@ -16,31 +16,18 @@ export default function Home() {
   const [showExperience, setShowExperience] = useState(false)
   const [showTools, setShowTools] = useState(false)
   const [globeSize, setGlobeSize] = useState(1)
-
-  // FIX: Missing Calendly state
   const [calendlyOpen, setCalendlyOpen] = useState(false)
 
-  // EXPAND Calendly
-  const expandCalendly = () => {
-  setCalendlyOpen(true);
-};
+  const expandCalendly = () => setCalendlyOpen(true)
+  const collapseCalendly = () => setCalendlyOpen(false)
 
-const collapseCalendly = () => {
-  setCalendlyOpen(false);
-};
-
-  // Responsive globe size
+  // Handle responsive globe scale
   useEffect(() => {
     const resize = () => {
       const w = window.innerWidth
-      let scale = 1
-
-      if (w < 480) scale = 0.6      // mobile
-      else if (w < 768) scale = 0.75  // tablet
-      else scale = 1.2               // desktop
-
-      setGlobeSize(scale)
-
+      if (w < 480) setGlobeSize(0.6)
+      else if (w < 768) setGlobeSize(0.75)
+      else setGlobeSize(1.2)
     }
 
     resize()
@@ -58,10 +45,13 @@ const collapseCalendly = () => {
       </Head>
 
       {/* BACKGROUND */}
-      <div style={styles.backgroundLayer}></div>
+      <div style={styles.backgroundLayer} />
 
-      {/* 3D CANVAS */}
-      <div style={styles.canvasLayer}>
+      {/* 3D CANVAS (WITH TOP SPACING) */}
+      <div style={{ 
+        ...styles.canvasLayer,
+        paddingTop: "80px"
+      }}>
         <Globe
           size={globeSize}
           isPopupOpen={
@@ -95,7 +85,6 @@ const collapseCalendly = () => {
         </div>
       )}
 
-
       {showExperience && (
         <div style={styles.popupOverlay} onClick={() => setShowExperience(false)}>
           <div style={styles.aboutPopup} onClick={(e) => e.stopPropagation()}>
@@ -112,8 +101,7 @@ const collapseCalendly = () => {
         </div>
       )}
 
-
-      {/* Calendly Floating Bubble */}
+      {/* SCHEDULE BUBBLE */}
       <CalendlyBubble
         calendlyOpen={calendlyOpen}
         onExpand={expandCalendly}
