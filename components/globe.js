@@ -7,7 +7,6 @@ import * as THREE from "three"
 import GlobeButtons from "./GlobeButtons"
 import FloatingTitle from "./FloatingTitle"
 
-import TwinklingStars from "./TwinklingStars"
 import StarField from "./StarField"
 
 
@@ -38,20 +37,21 @@ function GlobeMesh({ size, shouldRotate }) {
   )
 }
 
-function GlowSphere() {
+function GlowSphere({ size }) {
   return (
-    <mesh scale={10} raycast={null}>
+    <mesh scale={size * 3.6} position={[0, 0, 0]}>
       <sphereGeometry args={[1, 32, 32]} />
       <meshBasicMaterial
         color="#1a2cff"
         transparent
-        opacity={0.03}   // LOWER opacity
+        opacity={0.03}
         side={THREE.BackSide}
-        depthWrite={false}  // ⭐ does NOT block stars
+        depthWrite={false}
       />
     </mesh>
   )
 }
+
 
 export default function Globe({
   size,
@@ -89,10 +89,10 @@ export default function Globe({
       {/* ⭐ Base Starfield (always visible) */}
       <Stars
         radius={120}
-        depth={80}
-        count={9000}
-        factor={2.5}
-        saturation={0}
+        depth={1}
+        count={500}
+        factor={5.5}
+        saturation={.5}
         fade
       />
 
@@ -100,18 +100,19 @@ export default function Globe({
       <StarField mouse={mouse} />
 
       {/* Lighting */}
-      <ambientLight intensity={4} />
+      <ambientLight intensity={2} />
       <directionalLight position={[5, 5, 5]} intensity={1.2} />
 
 
       {/* Background glow behind everything */}
-      <GlowSphere />
+      <group>
+        <GlowSphere size={size} />
+        <GlobeMesh size={size} shouldRotate={shouldRotate} />
+      </group>
+
 
       {/* 3D Title */}
       <FloatingTitle />
-
-      {/* Globe */}
-      <GlobeMesh size={size} shouldRotate={shouldRotate} />
 
       {/* Buttons */}
       <GlobeButtons

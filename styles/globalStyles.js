@@ -5,7 +5,7 @@ const styles = {
     left: 0,
     width: "100vw",
     height: "100vh",
-    background: "radial-gradient(circle at center 60%, #2a58ff 0%, #0f0f34 20%, #000000 40%)",
+    background: "radial-gradient(circle at center 50%, #2a58ff 0%, #0f0f34 20%, #000000 40%)",
     zIndex: 0,          // stays behind everything
     },
 
