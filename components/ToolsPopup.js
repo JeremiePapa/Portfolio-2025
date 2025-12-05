@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function ToolsPopup({ onClose }) {
-  // Clean, sorted, non-duplicate tool categories
+  
   const rawTools = {
     AI: [
       { name: "ChatGPT", logo: "chatgpt-6.svg", desc: "AI assistant for content, coding, and workflows." },
@@ -14,55 +14,65 @@ export default function ToolsPopup({ onClose }) {
     ],
 
     Development: [
-      { name: "VS Code", logo: "visual-studio-code-1.svg", desc: "Code editor for React, Next.js, and automation." },
-      { name: "Terminal", logo: "terminal.webp", desc: "System & development command-line tool." },
-      { name: "PowerShell", logo: "powershell.svg", desc: "Windows-based automation and scripting." },
+      { name: "GitHub", logo: "github-icon-1.svg", desc: "Version control and software collaboration platform." },
       { name: "Kali Linux", logo: "kali-1.svg", desc: "Security testing and penetration tools." },
-
-      // 3D website stack
-      { name: "Three.js", logo: "threejs-1.svg", desc: "3D graphics engine used to render interactive scenes." },
-      { name: "React Three Fiber (R3F)", logo: "react-2.svg", desc: "React renderer for building 3D scenes with Three.js." },
-      { name: "Next.js", logo: "next-js.svg", desc: "Framework handling routing, API routes, and dynamic imports." },
-      { name: "GitHub", logo: "github-icon-1.svg", desc: "Platform for version control and collaborative software development." }
+      { name: "Next.js", logo: "next-js.svg", desc: "Framework for routing, APIs, and SSR." },
+      { name: "PowerShell", logo: "powershell.svg", desc: "Windows-based automation and scripting." },
+      { name: "React Three Fiber (R3F)", logo: "react-2.svg", desc: "React renderer for Three.js scenes." },
+      { name: "Terminal", logo: "terminal.webp", desc: "System & development command-line tool." },
+      { name: "Three.js", logo: "threejs-1.svg", desc: "3D graphics rendering engine." },
+      { name: "VS Code", logo: "visual-studio-code-1.svg", desc: "Editor for React, Next.js, and automation." },
     ],
 
     Automation: [
-      { name: "n8n", logo: "n8n.webp", desc: "Automation workflows and API integrations." },
-      { name: "Google Sheets", logo: "google-sheets-logo-icon.svg", desc: "Tracking, organizing data, automation triggers." },
-      { name: "Google Forms", logo: "google-forms.svg", desc: "Lead capture integrated into automation flows." },
+      { name: "GoHighLevel (GHL)", logo: "GHL.svg", desc: "CRM, funnels, pipelines, automations, and AI workflows." },
       { name: "Google Drive", logo: "drive-google.svg", desc: "Cloud storage integrated with automation processes." },
-      { name: "Pipedrive CRM", logo: "pipedrive.webp", desc: "Sales pipeline, leads, and workflow triggers." },      
+      { name: "Google Forms", logo: "google-forms.svg", desc: "Lead capture integrated into automation flows." },
+      { name: "Google Sheets", logo: "google-sheets-logo-icon.svg", desc: "Tracking, organizing data, automation triggers." },
+      { name: "n8n", logo: "n8n.webp", desc: "Automation workflows and API integrations." },
+      { name: "Pipedrive CRM", logo: "pipedrive.webp", desc: "Sales pipeline, leads, and workflow triggers." },
     ],
 
     Communication: [
+      { name: "Facebook", logo: "facebook.svg", desc: "Lead sources and automation messaging." },
       { name: "Slack", logo: "slack-new-logo.svg", desc: "Team communication, alerts, and AI assistants." },
       { name: "Telegram", logo: "telegram.svg", desc: "Messaging platform for alerts and integrations." },
-      { name: "Facebook", logo: "facebook.svg", desc: "Social platform used for lead sources and automation." },
     ],
   };
 
-  // Build unique ALL category
-  const ALL_ITEMS = [];
-  Object.keys(rawTools).forEach((cat) => {
-    rawTools[cat].forEach((item) => {
-      if (!ALL_ITEMS.find((x) => x.name === item.name)) {
-        ALL_ITEMS.push(item);
-      }
-    });
-  });
+  // ⭐ Scroll reference
+  const scrollRef = useRef(null);
 
-  // Add All to categories
-  const categories = ["All", ...Object.keys(rawTools).filter(
-    (cat) => rawTools[cat].length >= 3
-  )];
+  // ⭐ Sort each category alphabetically
+  const sortedTools = Object.fromEntries(
+    Object.entries(rawTools).map(([category, items]) => [
+      category,
+      items.slice().sort((a, b) => a.name.localeCompare(b.name)),
+    ])
+  );
+
+  // ⭐ Build ALL category sorted alphabetically
+  const ALL_ITEMS = Object.values(sortedTools)
+    .flat()
+    .filter((item, index, arr) => index === arr.findIndex((x) => x.name === item.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const categories = ["All", ...Object.keys(sortedTools)];
 
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const getToolsForCategory = () => {
-    return activeCategory === "All" ? ALL_ITEMS : rawTools[activeCategory];
-  };
+  const getToolsForCategory = () =>
+    activeCategory === "All" ? ALL_ITEMS : sortedTools[activeCategory];
 
-  // Styles (unchanged)
+  // ⭐ Reset scroll on category change
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [activeCategory]);
+
+  // ----- UI STYLES -----
+
   const popupStyle = {
     background: "rgba(113, 113, 113, 0.8)",
     border: "5px solid rgba(255, 255, 255, 0.64)",
@@ -100,6 +110,8 @@ export default function ToolsPopup({ onClose }) {
     objectFit: "contain",
   };
 
+  // ----- RENDER -----
+
   return (
     <div style={popupStyle}>
       <h2 style={{ marginBottom: "15px" }}>My Tools</h2>
@@ -116,7 +128,16 @@ export default function ToolsPopup({ onClose }) {
         ))}
       </div>
 
-      <div style={{ textAlign: "left", maxHeight: "300px", overflowY: "auto", paddingRight: 5 }}>
+      {/* ⭐ Scrollable tools container */}
+      <div
+        ref={scrollRef}
+        style={{
+          textAlign: "left",
+          maxHeight: "300px",
+          overflowY: "auto",
+          paddingRight: 5,
+        }}
+      >
         {getToolsForCategory().map((tool) => (
           <div key={tool.name} style={toolRow}>
             {tool.logo && (

@@ -45,8 +45,6 @@ export default function TwinklingStars({ count = 2500, spread = 150 }) {
           void main() {
             vTwinkle = fract(position.x * 12.0 + position.y * 7.0 + position.z * 5.0);
             vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            
-            // BIGGER stars (very visible now)
             gl_PointSize = 4.0 + sin(vTwinkle * 10.0 + uTime * 3.0) * 3.0;
             gl_Position = projectionMatrix * mvPosition;
           }
@@ -55,8 +53,7 @@ export default function TwinklingStars({ count = 2500, spread = 150 }) {
           void main() {
             float d = length(gl_PointCoord - vec2(0.5));
             if (d > 0.5) discard;
-
-            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); // bright white
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
           }
         `}
       />
