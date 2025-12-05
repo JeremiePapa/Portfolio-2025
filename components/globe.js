@@ -10,6 +10,7 @@ import FloatingTitle from "./FloatingTitle"
 import StarField from "./StarField"
 
 
+
 function GlobeMesh({ size, shouldRotate }) {
   const globeRef = useRef()
   const targetScale = useRef(new THREE.Vector3(size, size, size))
