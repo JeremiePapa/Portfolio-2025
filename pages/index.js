@@ -48,10 +48,7 @@ export default function Home() {
       <div style={styles.backgroundLayer} />
 
       {/* 3D CANVAS (WITH TOP SPACING) */}
-      <div style={{ 
-        ...styles.canvasLayer,
-        paddingTop: "80px"
-      }}>
+      <div style={styles.canvasLayer}>
         <Globe
           size={globeSize}
           isPopupOpen={
