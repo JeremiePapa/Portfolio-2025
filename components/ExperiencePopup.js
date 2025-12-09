@@ -11,7 +11,7 @@ export default function ExperiencePopup({ onClose }) {
         border: "5px solid rgba(255,255,255,0.64)",
         padding: "30px",
         borderRadius: "20px",
-        width: "340px",
+        width: "360px",
         maxWidth: "90vw",
         color: "white",
         backdropFilter: "blur(10px)",
@@ -21,11 +21,13 @@ export default function ExperiencePopup({ onClose }) {
     >
       <h2 style={{ marginBottom: "10px" }}>Experience</h2>
 
-      <p style={{ fontSize: "15px", lineHeight: "1.6", marginBottom: "20px" }}>
-        • Automation workflows (AI Agents, n8n, GHL)<br/>
-        • API integrations & lead routing<br/>
-        • Smart chatbot systems using LLMs<br/>
-        • Full-stack web development for clients<br/>
+      <p style={{ fontSize: "15px", lineHeight: "1.6", marginBottom: "20px", textAlign: "left" }}>
+        • Automation workflows (AI Agents, n8n, GHL) <br />
+        • GHL funnel building (landing page, pricing, checkout, receipts) <br />
+        • GHL chatbot + appointment integrations <br />
+        • API integrations & lead routing automation <br />
+        • Smart chatbot systems using LLMs <br />
+        • Full-stack web development for clients <br />
       </p>
 
       {/* SEE MY WORK BUTTON */}
