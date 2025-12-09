@@ -1,0 +1,257 @@
+/* PAGE */
+.page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  transition: 0.3s;
+  font-family: Poppins, sans-serif;
+}
+
+.page[data-theme="dark"] {
+  background: #0d0d16;
+  color: white;
+}
+
+.page[data-theme="light"] {
+  background: #f5f5f5;
+  color: #111;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* TOP BAR */
+.topBar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.btnPrimary {
+  padding: 10px 20px;
+  background: #2a58ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btnTheme {
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid #2a58ff;
+  border-radius: 10px;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* CARD */
+.card {
+  background: var(--card-bg);
+  padding: 15px;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.25s;
+}
+
+.page[data-theme="dark"] .card {
+  --card-bg: #1a1a27;
+}
+
+.page[data-theme="light"] .card {
+  --card-bg: white;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #00000020;
+}
+
+
+.cardText {
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.cardImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 260px;          /* FIXED HEIGHT for all cards */
+  overflow: hidden;       /* prevent image overflow */
+  border-radius: 10px;
+  background: #00000015;  /* subtle background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/* CARD ARROWS */
+.cardArrowLeft,
+.cardArrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  padding: 8px 12px;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  z-index: 10;
+  transition: 0.25s;
+}
+
+.cardArrowLeft:hover,
+.cardArrowRight:hover {
+  background: #2a58ff;
+}
+
+.cardArrowLeft {
+  left: 10px;
+}
+
+.cardArrowRight {
+  right: 10px;
+}
+
+/* POPUP OVERLAY */
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+/* POPUP BOX */
+.popupBox {
+  background: var(--popup-bg);
+  border-radius: 18px;
+  max-width: 900px;
+  width: 100%;
+  padding: 25px;
+  max-height: 90vh;
+  overflow-y: auto;
+  color: inherit;
+}
+
+.page[data-theme="dark"] .popupBox {
+  --popup-bg: #1a1a27;
+}
+
+.page[data-theme="light"] .popupBox {
+  --popup-bg: white;
+}
+
+/* POPUP IMAGE AREA */
+.popupImageArea {
+  width: 100%;
+  height: 480px;
+  background: #00000011;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 760px) {
+  .popupImageArea {
+    height: 260px;
+  }
+}
+
+.popupImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+/* POPUP ARROWS INSIDE IMAGE */
+.popupArrowLeft,
+.popupArrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  padding: 10px 14px;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 20;
+  transition: 0.25s;
+}
+
+.popupArrowLeft:hover,
+.popupArrowRight:hover {
+  background: #2a58ff;
+}
+
+.popupArrowLeft {
+  left: 10px;
+}
+
+.popupArrowRight {
+  right: 10px;
+}
+
+/* THUMBNAILS */
+.thumbRow {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.thumb {
+  width: 90px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.activeThumb {
+  border-color: #2a58ff;
+}
+
+/* DESCRIPTION */
+.popupText {
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+/* POPUP BUTTONS */
+.popupButtons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+}

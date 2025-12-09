@@ -1,26 +1,35 @@
 // pages/work.js
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import styles from "./work.module.css";
 
 export default function Work() {
-  const [activeItem, setActiveItem] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeImage, setActiveImage] = useState(0);
   const [theme, setTheme] = useState("dark");
+  const [cardIndices, setCardIndices] = useState({});
 
-  // Load saved theme
+  // Load theme once
   useEffect(() => {
     const saved = localStorage.getItem("theme");
     if (saved) setTheme(saved);
   }, []);
 
-  // Apply theme class to body
+  // Apply theme
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+
+  // Utility to get images
+  const getImages = (item) => {
+    if (item.images?.length) return item.images;
+    if (item.img) return [item.img];
+    return [];
   };
 
+  // Work data
   const works = [
     {
       title: "AI Agent Workflow – Facebook Messenger",
@@ -38,219 +47,167 @@ export default function Work() {
       full:
         "Built an optimized GoHighLevel website and integrated a 24/7 AI chat assistant that helps visitors book appointments, ask questions, and navigate services. The client saved countless hours on customer support.",
     },
+    {
+      title: "GHL Sales Funnel – High-Converting Build",
+      images: [
+        "/workflows/GHLSalesfunnel/GHLSalesfunnel.svg",
+        "/workflows/GHLSalesfunnel/GHLReceipt.svg",
+        "/workflows/GHLSalesfunnel/GHLPricing.svg",
+        "/workflows/GHLSalesfunnel/GHLLandingPage.svg",
+        "/workflows/GHLSalesfunnel/GHLcheckout.svg",
+      ],
+      short:
+        "Complete GHL sales funnel including landing page, pricing, checkout, and automated receipt.",
+      full:
+        "This high-converting funnel streamlined onboarding, automated receipts, handled order verification, and boosted conversions while reducing hours of manual work.",
+    },
   ];
 
-  // THEME COLORS
-  const colors = {
-    dark: {
-      bg: "#0d0d16",
-      card: "#1a1a27",
-      text: "white",
-      popup: "#1a1a27",
-      border: "#2a58ff",
-    },
-    light: {
-      bg: "#f5f5f5",
-      card: "white",
-      text: "#111",
-      popup: "white",
-      border: "#2a58ff",
-    },
+  // Card slider controls
+  const cardPrev = (idx, e) => {
+    e.stopPropagation();
+    const imgs = getImages(works[idx]);
+    setCardIndices((prev) => ({
+      ...prev,
+      [idx]: (prev[idx] ?? 0) === 0 ? imgs.length - 1 : (prev[idx] ?? 0) - 1,
+    }));
   };
 
-  const c = colors[theme];
+  const cardNext = (idx, e) => {
+    e.stopPropagation();
+    const imgs = getImages(works[idx]);
+    setCardIndices((prev) => ({
+      ...prev,
+      [idx]: (prev[idx] ?? 0) === imgs.length - 1 ? 0 : (prev[idx] ?? 0) + 1,
+    }));
+  };
+
+  // Open popup
+  const openPopup = (idx) => {
+    setActiveIndex(idx);
+    setActiveImage(cardIndices[idx] ?? 0);
+  };
+
+  // Popup arrows
+  const popupPrev = (e) => {
+    e.stopPropagation();
+    const imgs = getImages(works[activeIndex]);
+    setActiveImage((prev) => (prev === 0 ? imgs.length - 1 : prev - 1));
+  };
+
+  const popupNext = (e) => {
+    e.stopPropagation();
+    const imgs = getImages(works[activeIndex]);
+    setActiveImage((prev) => (prev === imgs.length - 1 ? 0 : prev + 1));
+  };
+
+  // Keyboard support
+  useEffect(() => {
+    if (activeIndex === null) return;
+    const handler = (e) => {
+      if (e.key === "Escape") setActiveIndex(null);
+      if (e.key === "ArrowLeft") popupPrev(e);
+      if (e.key === "ArrowRight") popupNext(e);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [activeIndex]);
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "40px 20px",
-        background: c.bg,
-        color: c.text,
-        transition: "0.3s",
-        fontFamily: "Poppins, sans-serif",
-      }}
-    >
-        <style jsx global>{`
-            html, body {
-                margin: 0 !important;
-                padding: 0 !important;
-                background: #0d0d16 !important; /* dark mode bg */
-                overflow-x: hidden !important;
-            }
+    <div className={styles.page} data-theme={theme}>
+      <h1 className={styles.header}>My Work</h1>
 
-            body[data-theme="light"] {
-                background: #f4f4f4 !important;
-            }
-
-            /* Remove any unwanted outlines or borders */
-            * {
-                outline: none !important;
-                box-shadow: none !important;
-            }
-            `}</style>
-
-
-      {/* HEADER */}
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>My Work</h1>
-
-      {/* TOP ACTION BAR */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "10px",
-          marginBottom: "25px",
-        }}
-      >
-        {/* Back to 3D button */}
-        <button
-          onClick={() => (window.location.href = "/")}
-          style={{
-            padding: "10px 20px",
-            background: c.border,
-            border: "none",
-            borderRadius: "10px",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
+      {/* TOP BAR */}
+      <div className={styles.topBar}>
+        <button className={styles.btnPrimary} onClick={() => (window.location.href = "/")}>
           ⬅ Back to 3D Portfolio
         </button>
 
-        {/* Theme Toggle */}
-        <button
-          onClick={toggleTheme}
-          style={{
-            padding: "10px 20px",
-            background: "transparent",
-            border: `2px solid ${c.border}`,
-            borderRadius: "10px",
-            color: c.text,
-            cursor: "pointer",
-          }}
-        >
+        <button className={styles.btnTheme} onClick={toggleTheme}>
           {theme === "dark" ? "🌞 Light Mode" : "🌙 Dark Mode"}
         </button>
       </div>
 
-      {/* WORK GRID */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: "25px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        {works.map((item) => (
-          <div
-            key={item.title}
-            onClick={() => setActiveItem(item)}
-            style={{
-              background: c.card,
-              padding: "15px",
-              borderRadius: "14px",
-              cursor: "pointer",
-              transition: "0.2s",
-            }}
-          >
-            <img
-              src={item.img}
-              alt={item.title}
-              style={{
-                width: "100%",
-                borderRadius: "10px",
-                marginBottom: "10px",
-              }}
-            />
-            <h3>{item.title}</h3>
-            <p style={{ fontSize: "14px", opacity: 0.8 }}>{item.short}</p>
-          </div>
-        ))}
+      {/* CARDS GRID */}
+      <div className={styles.grid}>
+        {works.map((item, idx) => {
+          const imgs = getImages(item);
+          const index = cardIndices[idx] ?? 0;
+
+          return (
+            <div key={item.title} className={styles.card} onClick={() => openPopup(idx)}>
+              <div className={styles.cardImageWrapper}>
+                {imgs.length > 1 && (
+                  <button className={styles.cardArrowLeft} onClick={(e) => cardPrev(idx, e)}>
+                    ‹
+                  </button>
+                )}
+
+                {imgs.length > 1 && (
+                  <button className={styles.cardArrowRight} onClick={(e) => cardNext(idx, e)}>
+                    ›
+                  </button>
+                )}
+
+                <img src={imgs[index]} className={styles.cardImage} />
+              </div>
+
+              <h3>{item.title}</h3>
+              <p className={styles.cardText}>{item.short}</p>
+            </div>
+          );
+        })}
       </div>
 
       {/* POPUP */}
-      {activeItem && (
-        <div
-          onClick={() => setActiveItem(null)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.55)",
-            backdropFilter: "blur(4px)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "20px",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: c.popup,
-              borderRadius: "18px",
-              maxWidth: "850px",
-              width: "100%",
-              padding: "30px",
-              color: c.text,
-              boxShadow: "0 10px 40px rgba(0,0,0,0.25)",
-              maxHeight: "90vh",
-              overflowY: "auto",
-              transition: "0.3s",
-            }}
-          >
-            <h2>{activeItem.title}</h2>
+      {activeIndex !== null && (
+        <div className={styles.popupOverlay} onClick={() => setActiveIndex(null)}>
+          <div className={styles.popupBox} onClick={(e) => e.stopPropagation()}>
+            <h2>{works[activeIndex].title}</h2>
 
-            <img
-              src={activeItem.img}
-              alt={activeItem.title}
-              style={{
-                width: "100%",
-                borderRadius: "12px",
-                margin: "20px 0",
-              }}
-            />
+            {/* POPUP IMAGE AREA */}
+            <div className={styles.popupImageArea}>
 
-            <p style={{ fontSize: "16px", lineHeight: "1.6" }}>
-              {activeItem.full}
-            </p>
+              {getImages(works[activeIndex]).length > 1 && (
+                <button className={styles.popupArrowLeft} onClick={popupPrev}>
+                  ‹
+                </button>
+              )}
 
-            {/* BUTTONS */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "25px",
-              }}
-            >
-              <button
-                onClick={() => (window.location.href = "/")}
-                style={{
-                  padding: "10px 18px",
-                  background: c.border,
-                  border: "none",
-                  borderRadius: "8px",
-                  color: "white",
-                  cursor: "pointer",
-                }}
-              >
+              <img
+                src={getImages(works[activeIndex])[activeImage]}
+                className={styles.popupImage}
+              />
+
+              {getImages(works[activeIndex]).length > 1 && (
+                <button className={styles.popupArrowRight} onClick={popupNext}>
+                  ›
+                </button>
+              )}
+
+            </div>
+
+
+            {/* THUMBNAILS */}
+            <div className={styles.thumbRow}>
+              {getImages(works[activeIndex]).map((url, i) => (
+                <img
+                  key={i}
+                  src={url}
+                  className={`${styles.thumb} ${i === activeImage ? styles.activeThumb : ""}`}
+                  onClick={() => setActiveImage(i)}
+                />
+              ))}
+            </div>
+
+            <p className={styles.popupText}>{works[activeIndex].full}</p>
+
+            <div className={styles.popupButtons}>
+              <button className={styles.btnPrimary} onClick={() => (window.location.href = "/")}>
                 ⬅ Back to 3D Portfolio
               </button>
 
-              <button
-                onClick={() => setActiveItem(null)}
-                style={{
-                  padding: "10px 18px",
-                  background: "transparent",
-                  border: `2px solid ${c.border}`,
-                  borderRadius: "8px",
-                  color: c.text,
-                  cursor: "pointer",
-                }}
-              >
+              <button className={styles.btnTheme} onClick={() => setActiveIndex(null)}>
                 Close
               </button>
             </div>
