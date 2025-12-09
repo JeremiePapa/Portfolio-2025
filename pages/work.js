@@ -50,11 +50,11 @@ export default function Work() {
     {
       title: "GHL Sales Funnel – High-Converting Build",
       images: [
-        "/workflows/GHLSalesfunnel/GHLSalesfunnel.svg",
-        "/workflows/GHLSalesfunnel/GHLReceipt.svg",
-        "/workflows/GHLSalesfunnel/GHLPricing.svg",
-        "/workflows/GHLSalesfunnel/GHLLandingPage.svg",
-        "/workflows/GHLSalesfunnel/GHLcheckout.svg",
+        "/workflows/GHLSalesFunnel/GHLSalesfunnel.svg",
+        "/workflows/GHLSalesFunnel/GHLReceipt.svg",
+        "/workflows/GHLSalesFunnel/GHLPricing.svg",
+        "/workflows/GHLSalesFunnel/GHLLandingPage.svg",
+        "/workflows/GHLSalesFunnel/GHLcheckout.svg",
       ],
       short:
         "Complete GHL sales funnel including landing page, pricing, checkout, and automated receipt.",
