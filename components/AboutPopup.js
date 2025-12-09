@@ -3,7 +3,11 @@ import styles from "../styles/globalStyles"
 export default function AboutPopup({ onClose }) {
   return (
     <div style={styles.aboutCard}>
-      <img src="/me.png" alt="Me" style={styles.aboutAvatar} />
+
+      {/* Avatar wrapper (circle) */}
+      <div style={styles.avatarWrap}>
+        <img src="/me.svg" alt="Me" style={styles.aboutAvatar} />
+      </div>
 
       <p style={styles.aboutText}>
         Hi! I'm Jeremie — a self-taught automation and web development

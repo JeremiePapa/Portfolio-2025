@@ -24,7 +24,7 @@ export default function Home() {
   // ✅ 1) Preload images (about photo + logos + earth) once on mount
   useEffect(() => {
     const imagesToPreload = [
-      "/logos/me.png",              // your about/avatar photo
+      "/me.svg",              // your about/avatar photo
       "/logos/earth2.webp",         // globe texture copy in /logos (optional)
       "/earth2.webp",               // actual globe texture
       "/logos/chatgpt-6.svg",
@@ -78,7 +78,7 @@ export default function Home() {
         />
         {/* ✅ Preload a few critical images */}
         <link rel="preload" as="image" href="/earth2.webp" />
-        <link rel="preload" as="image" href="/logos/me.png" />
+        <link rel="preload" as="image" href="/me.svg" />
       </Head>
 
       {/* BACKGROUND */}

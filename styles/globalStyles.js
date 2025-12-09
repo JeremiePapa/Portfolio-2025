@@ -64,16 +64,29 @@ const styles = {
     fontFamily: "Poppins, sans-serif",
     },
 
-aboutAvatar: {
-  width: "200px",
-  height: "200px",
-  borderRadius: "50%",
-  objectFit: "cover",
-  objectPosition: "center 40%",
-  border: "5px solid #2a58ff",
-  marginBottom: "15px",
-  background: "rgba(113, 113, 113, 0.8)"
-},
+/* NEW — AVATAR WRAPPER (Circle frame) */
+  avatarWrap: {
+    width: "200px",
+    height: "200px",
+    borderRadius: "50%",
+    overflow: "hidden",
+    margin: "0 auto 15px",
+    border: "5px solid #2a58ff",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "rgba(113, 113, 113, 0.8)",
+  },
+
+
+  /* UPDATED — AVATAR IMAGE (Inside image zooms) */
+  aboutAvatar: {
+    width: "140%",
+    height: "140%",
+    objectFit: "cover",
+    objectPosition: "center 35%",
+    transform: "scale(1.2)",
+  },
 
 aboutText: {
   fontSize: "15px",

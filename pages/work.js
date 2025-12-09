@@ -14,6 +14,20 @@ export default function Work() {
     if (saved) setTheme(saved);
   }, []);
 
+  // Disable background scroll when popup is open
+useEffect(() => {
+  if (activeIndex !== null) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [activeIndex]);
+
+
   // Apply theme
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
@@ -116,6 +130,27 @@ export default function Work() {
 
   return (
     <div className={styles.page} data-theme={theme}>
+
+      {/* GLOBAL FIXES */}
+    <style jsx global>{`
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #0d0d16 !important;
+        overflow: hidden !important;
+      }
+
+      body[data-theme="light"] {
+        background: #f5f5f5 !important;
+      }
+
+      #__next {
+        height: 100vh !important;
+        overflow: hidden !important;
+      }
+    `}</style>
+
+      
       <h1 className={styles.header}>My Work</h1>
 
       {/* TOP BAR */}
