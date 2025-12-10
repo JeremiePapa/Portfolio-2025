@@ -3,30 +3,24 @@ import { useEffect, useState } from "react";
 import styles from "./work.module.css";
 
 export default function Work() {
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [activeImage, setActiveImage] = useState(0);
-  const [theme, setTheme] = useState("dark");
-  const [cardIndices, setCardIndices] = useState({});
+  const [activeIndex, setActiveIndex] = useState(null);      // selected card (popup)
+  const [activeImage, setActiveImage] = useState(0);         // popup image index
+  const [theme, setTheme] = useState("dark");                // theme
+  const [cardIndices, setCardIndices] = useState({});        // image index per card
+  const [cardAnimDirection, setCardAnimDirection] = useState({}); // animation per card
+  const [popupAnimDirection, setPopupAnimDirection] = useState(null); // popup fade direction
 
-  // Load theme once
+  // Load theme
   useEffect(() => {
     const saved = localStorage.getItem("theme");
     if (saved) setTheme(saved);
   }, []);
 
-  // Disable background scroll when popup is open
-useEffect(() => {
-  if (activeIndex !== null) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
-
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [activeIndex]);
-
+  // Prevent background scroll when popup is open
+  useEffect(() => {
+    document.body.style.overflow = activeIndex !== null ? "hidden" : "";
+    return () => (document.body.style.overflow = "");
+  }, [activeIndex]);
 
   // Apply theme
   useEffect(() => {
@@ -36,30 +30,27 @@ useEffect(() => {
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
-  // Utility to get images
+  // Safe image getter
   const getImages = (item) => {
-    if (item.images?.length) return item.images;
+    if (!item) return [];
+    if (Array.isArray(item.images) && item.images.length > 0) return item.images;
     if (item.img) return [item.img];
     return [];
   };
 
-  // Work data
+  // WORK DATA
   const works = [
     {
       title: "AI Agent Workflow – Facebook Messenger",
       img: "/workflows/FB-AI-Agent.jpg",
-      short:
-        "AI-driven workflow that responds instantly to leads and organizes data.",
-      full:
-        "This automation handles lead intake, routes data into CRM, and replies instantly to new inquiries via AI. The client reduced manual workload by 70% and increased response speed dramatically.",
+      short: "AI-driven workflow that responds instantly to leads and organizes data.",
+      full: "This automation handles lead intake, routes data into CRM, and replies instantly.",
     },
     {
       title: "GHL Website + AI Chatbot Integration",
       img: "/workflows/GHL-Website-with-ai-chat.jpg",
-      short:
-        "High-converting website with a fully embedded AI health assistant.",
-      full:
-        "Built an optimized GoHighLevel website and integrated a 24/7 AI chat assistant that helps visitors book appointments, ask questions, and navigate services. The client saved countless hours on customer support.",
+      short: "High-converting website with a fully embedded AI health assistant.",
+      full: "Built an optimized GoHighLevel website and integrated an AI assistant.",
     },
     {
       title: "GHL Sales Funnel – High-Converting Build",
@@ -70,53 +61,69 @@ useEffect(() => {
         "/workflows/GHLSalesFunnel/GHLLandingPage.svg",
         "/workflows/GHLSalesFunnel/GHLCheckout.svg",
       ],
-
-      short:
-        "Complete GHL sales funnel including landing page, pricing, checkout, and automated receipt.",
-      full:
-        "This high-converting funnel streamlined onboarding, automated receipts, handled order verification, and boosted conversions while reducing hours of manual work.",
+      short: "Complete GHL sales funnel including landing page, pricing, checkout.",
+      full: "This high-converting funnel streamlined onboarding and automated receipts.",
     },
   ];
 
-  // Card slider controls
+  // Swipe support
+  let touchStartX = 0;
+  const onTouchStart = (e) => (touchStartX = e.touches[0].clientX);
+
+  const onTouchEndCard = (idx, e) => {
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (diff > 50) cardPrev(idx, e);
+    if (diff < -50) cardNext(idx, e);
+  };
+
+  const onTouchEndPopup = (e) => {
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (diff > 50) popupPrev(e);
+    if (diff < -50) popupNext(e);
+  };
+
+  // CARD SLIDER
   const cardPrev = (idx, e) => {
     e.stopPropagation();
+    setCardAnimDirection((p) => ({ ...p, [idx]: "right" }));
     const imgs = getImages(works[idx]);
-    setCardIndices((prev) => ({
-      ...prev,
-      [idx]: (prev[idx] ?? 0) === 0 ? imgs.length - 1 : (prev[idx] ?? 0) - 1,
+    setCardIndices((p) => ({
+      ...p,
+      [idx]: (p[idx] ?? 0) === 0 ? imgs.length - 1 : (p[idx] ?? 0) - 1,
     }));
   };
 
   const cardNext = (idx, e) => {
     e.stopPropagation();
+    setCardAnimDirection((p) => ({ ...p, [idx]: "left" }));
     const imgs = getImages(works[idx]);
-    setCardIndices((prev) => ({
-      ...prev,
-      [idx]: (prev[idx] ?? 0) === imgs.length - 1 ? 0 : (prev[idx] ?? 0) + 1,
+    setCardIndices((p) => ({
+      ...p,
+      [idx]: (p[idx] ?? 0) === imgs.length - 1 ? 0 : (p[idx] ?? 0) + 1,
     }));
   };
 
-  // Open popup
+  // POPUP
   const openPopup = (idx) => {
     setActiveIndex(idx);
     setActiveImage(cardIndices[idx] ?? 0);
   };
 
-  // Popup arrows
   const popupPrev = (e) => {
     e.stopPropagation();
+    setPopupAnimDirection("right");
     const imgs = getImages(works[activeIndex]);
-    setActiveImage((prev) => (prev === 0 ? imgs.length - 1 : prev - 1));
+    setActiveImage((p) => (p === 0 ? imgs.length - 1 : p - 1));
   };
 
   const popupNext = (e) => {
     e.stopPropagation();
+    setPopupAnimDirection("left");
     const imgs = getImages(works[activeIndex]);
-    setActiveImage((prev) => (prev === imgs.length - 1 ? 0 : prev + 1));
+    setActiveImage((p) => (p === imgs.length - 1 ? 0 : p + 1));
   };
 
-  // Keyboard support
+  // Keyboard navigation
   useEffect(() => {
     if (activeIndex === null) return;
     const handler = (e) => {
@@ -128,50 +135,44 @@ useEffect(() => {
     return () => window.removeEventListener("keydown", handler);
   }, [activeIndex]);
 
+  // RENDER
   return (
     <div className={styles.page} data-theme={theme}>
 
-      {/* GLOBAL FIXES */}
-    <style jsx global>{`
-      html, body {
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #0d0d16 !important;
-      }
+      {/* Fix theme background */}
+      <style jsx global>{`
+        html, body { margin: 0; padding: 0; background: #0d0d16; }
+        body[data-theme="light"] { background: #f5f5f5; }
+      `}</style>
 
-      body[data-theme="light"] {
-        background: #f5f5f5 !important;
-      }
-
-      #__next {
-        height: 100%;
-      }
-    `}</style>
-
-
-      
       <h1 className={styles.header}>My Work</h1>
 
-      {/* TOP BAR */}
       <div className={styles.topBar}>
         <button className={styles.btnPrimary} onClick={() => (window.location.href = "/")}>
           ⬅ Back to 3D Portfolio
         </button>
-
         <button className={styles.btnTheme} onClick={toggleTheme}>
           {theme === "dark" ? "🌞 Light Mode" : "🌙 Dark Mode"}
         </button>
       </div>
 
-      {/* CARDS GRID */}
+      {/* GRID */}
       <div className={styles.grid}>
         {works.map((item, idx) => {
           const imgs = getImages(item);
           const index = cardIndices[idx] ?? 0;
 
           return (
-            <div key={item.title} className={styles.card} onClick={() => openPopup(idx)}>
+            <div
+              key={item.title}
+              className={styles.card}
+              onClick={() => openPopup(idx)}
+              onTouchStart={onTouchStart}
+              onTouchEnd={(e) => onTouchEndCard(idx, e)}
+            >
               <div className={styles.cardImageWrapper}>
+                
+                {/* Arrows only for multi-image cards */}
                 {imgs.length > 1 && (
                   <button className={styles.cardArrowLeft} onClick={(e) => cardPrev(idx, e)}>
                     ‹
@@ -184,7 +185,20 @@ useEffect(() => {
                   </button>
                 )}
 
-                <img src={imgs[index]} alt={item.title} className={styles.cardImage} />
+                {/* Correct fade animation ONLY if multiple images */}
+                <img
+                  src={imgs[index]}
+                  alt={item.title}
+                  className={`${styles.cardImage} ${
+                    imgs.length > 1
+                      ? cardAnimDirection[idx] === "left"
+                        ? styles.slideFadeLeftEnter
+                        : cardAnimDirection[idx] === "right"
+                        ? styles.slideFadeRightEnter
+                        : ""
+                      : ""
+                  }`}
+                />
               </div>
 
               <h3>{item.title}</h3>
@@ -198,38 +212,43 @@ useEffect(() => {
       {activeIndex !== null && (
         <div className={styles.popupOverlay} onClick={() => setActiveIndex(null)}>
           <div className={styles.popupBox} onClick={(e) => e.stopPropagation()}>
+
             <h2>{works[activeIndex].title}</h2>
 
-            {/* POPUP IMAGE AREA */}
-            <div className={styles.popupImageArea}>
-
+            <div
+              className={styles.popupImageArea}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEndPopup}
+            >
               {getImages(works[activeIndex]).length > 1 && (
-                <button className={styles.popupArrowLeft} onClick={popupPrev}>
-                  ‹
-                </button>
+                <button className={styles.popupArrowLeft} onClick={popupPrev}>‹</button>
               )}
 
+              {/* Popup fade animation */}
               <img
+                key={activeImage}
                 src={getImages(works[activeIndex])[activeImage]}
-                className={styles.popupImage}
+                className={`${styles.popupImage} ${
+                  popupAnimDirection === "left"
+                    ? styles.slideFadeLeftEnter
+                    : styles.slideFadeRightEnter
+                }`}
               />
 
               {getImages(works[activeIndex]).length > 1 && (
-                <button className={styles.popupArrowRight} onClick={popupNext}>
-                  ›
-                </button>
+                <button className={styles.popupArrowRight} onClick={popupNext}>›</button>
               )}
-
             </div>
 
-
-            {/* THUMBNAILS */}
+            {/* Thumbnails */}
             <div className={styles.thumbRow}>
               {getImages(works[activeIndex]).map((url, i) => (
                 <img
                   key={i}
                   src={url}
-                  className={`${styles.thumb} ${i === activeImage ? styles.activeThumb : ""}`}
+                  className={`${styles.thumb} ${
+                    i === activeImage ? styles.activeThumb : ""
+                  }`}
                   onClick={() => setActiveImage(i)}
                 />
               ))}
@@ -241,7 +260,6 @@ useEffect(() => {
               <button className={styles.btnPrimary} onClick={() => (window.location.href = "/")}>
                 ⬅ Back to 3D Portfolio
               </button>
-
               <button className={styles.btnTheme} onClick={() => setActiveIndex(null)}>
                 Close
               </button>
@@ -249,6 +267,7 @@ useEffect(() => {
           </div>
         </div>
       )}
+
     </div>
   );
 }

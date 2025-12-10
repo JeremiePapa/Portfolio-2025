@@ -1,3 +1,19 @@
+/* =======================
+   GLOBAL MOBILE FIXES
+   ======================= */
+
+:global(*) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:global(button:focus),
+:global(button:active),
+:global(img:focus),
+:global(img:active) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* PAGE */
 .page {
   min-height: 100vh;
@@ -86,7 +102,6 @@
   background: #00000020;
 }
 
-
 .cardText {
   font-size: 14px;
   opacity: 0.75;
@@ -103,8 +118,6 @@
   justify-content: center;
   align-items: center;
 }
-
-
 
 /* CARD ARROWS */
 .cardArrowLeft,
@@ -208,6 +221,9 @@
   border-radius: 50%;
   z-index: 20;
   transition: 0.25s;
+
+  -webkit-tap-highlight-color: transparent;
+  outline: none !important;
 }
 
 .popupArrowLeft:hover,
@@ -255,3 +271,36 @@
   display: flex;
   justify-content: space-between;
 }
+
+/* ============================
+   Smooth Slide + Fade Animations
+   ============================ */
+
+/* Fade + slide left (next image) */
+.slideFadeLeftEnter {
+  animation: slideFadeLeftEnter 0.35s ease forwards;
+}
+@keyframes slideFadeLeftEnter {
+  0% { opacity: 0; transform: translateX(40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.slideFadeRightEnter {
+  animation: slideFadeRightEnter 0.35s ease forwards;
+}
+@keyframes slideFadeRightEnter {
+  0% { opacity: 0; transform: translateX(-40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+
+/* When image leaves */
+.slideFadeExit {
+  animation: slideFadeExit 0.35s ease forwards;
+  position: absolute;
+}
+@keyframes slideFadeExit {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
