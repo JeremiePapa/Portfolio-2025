@@ -137,7 +137,6 @@ useEffect(() => {
         margin: 0 !important;
         padding: 0 !important;
         background: #0d0d16 !important;
-        overflow: hidden !important;
       }
 
       body[data-theme="light"] {
@@ -145,10 +144,10 @@ useEffect(() => {
       }
 
       #__next {
-        height: 100vh !important;
-        overflow: hidden !important;
+        height: 100%;
       }
     `}</style>
+
 
       
       <h1 className={styles.header}>My Work</h1>
@@ -185,7 +184,7 @@ useEffect(() => {
                   </button>
                 )}
 
-                <img src={imgs[index]} className={styles.cardImage} />
+                <img src={imgs[index]} alt={item.title} className={styles.cardImage} />
               </div>
 
               <h3>{item.title}</h3>
