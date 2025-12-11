@@ -47,7 +47,7 @@ export default function CalendlyBubble({ calendlyOpen, onExpand, onCollapse }) {
         onClick={!calendlyOpen ? onExpand : undefined}
       >
         <iframe
-          src="https://calendly.com/markjeremiepapa/new-meeting"
+          src="https://calendly.com/markjeremiepapa/30min"
           style={{
             width: "100%",
             height: "100%",
