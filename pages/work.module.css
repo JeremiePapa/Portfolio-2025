@@ -263,6 +263,7 @@
 .popupText {
   margin-top: 20px;
   line-height: 1.6;
+  white-space: pre-line;
 }
 
 /* POPUP BUTTONS */

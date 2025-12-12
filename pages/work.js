@@ -64,6 +64,16 @@ export default function Work() {
       short: "Complete GHL sales funnel including landing page, pricing, checkout.",
       full: "This high-converting funnel streamlined onboarding and automated receipts.",
     },
+    {
+        title: "PH Lead Generation Automation – Google Maps API",
+        images: [
+          "/LeadGenPh.svg"
+        ],
+        short: "Automated Google Maps lead scraper for PH businesses using TextSearch + Place Details API.",
+        full: "This automation gathers PH-based business leads (such as dental clinics and service providers) using Google Maps APIs. It automatically extracts business name, phone number, website, and Place ID for deduplication.\n\nHow it works:\n\n1. A query generator builds search terms for targeted PH cities.\n2. The Google Maps TextSearch API returns matching businesses.\n3. The Place Details API enriches each result with contact information.\n4. Custom dedupe logic prevents adding the same clinic twice.\n5. New leads are appended to Google Sheets for easy CRM import.\n6. A daily schedule keeps the lead list updated.\n\nThis workflow is designed for scalable lead generation across multiple Philippine cities."
+
+
+      },
   ];
 
   // Swipe support
