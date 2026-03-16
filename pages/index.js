@@ -3,7 +3,21 @@ import dynamic from "next/dynamic"
 import Head from "next/head"
 import styles from "../styles/globalStyles"
 
-const Globe = dynamic(() => import("../components/globe"), { ssr: false })
+const Globe = dynamic(() => import("../components/globe"), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      color: "white",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+      fontFamily: "Poppins"
+    }}>
+      Loading 3D Globe...
+    </div>
+  )
+})
 const AboutPopup = dynamic(() => import("../components/AboutPopup"), { ssr: false })
 const SkillsPopup = dynamic(() => import("../components/SkillsPopup"), { ssr: false })
 const CalendlyBubble = dynamic(() => import("../components/CalendlyBubble"), { ssr: false })
@@ -41,14 +55,23 @@ export default function Home() {
       "/logos/vercel.svg",
     ]
 
-    imagesToPreload.forEach((src) => {
-      const img = new Image()
-      img.src = src
-    })
-  }, [])
+      imagesToPreload.forEach((src) => {
+        const img = new Image()
+        img.src = src
+      })
+
+      // 🔥 Force browser to cache globe texture early
+      const texture = new Image()
+      texture.src = "/earth2.webp"
+
+      // 🔥 Warm up fetch cache
+      fetch("/earth2.webp")
+
+    }, [])
 
   // ✅ 2) Preload popup components so first click feels instant
   useEffect(() => {
+    import("../components/globe")
     AboutPopup.preload?.()
     SkillsPopup.preload?.()
     ExperiencePopup.preload?.()
@@ -61,7 +84,7 @@ export default function Home() {
       const w = window.innerWidth
       if (w < 480) setGlobeSize(0.6)
       else if (w < 768) setGlobeSize(0.75)
-      else setGlobeSize(1.2)
+      else setGlobeSize(1)
     }
 
     resize()
