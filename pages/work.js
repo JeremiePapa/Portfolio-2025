@@ -9,6 +9,7 @@ export default function Work() {
   const [cardIndices, setCardIndices] = useState({});        // image index per card
   const [cardAnimDirection, setCardAnimDirection] = useState({}); // animation per card
   const [popupAnimDirection, setPopupAnimDirection] = useState(null); // popup fade direction
+  const [filter, setFilter] = useState("All");
 
   // Load theme
   useEffect(() => {
@@ -42,18 +43,21 @@ export default function Work() {
   const works = [
     {
       title: "AI Agent Workflow – Facebook Messenger",
+      category: ["GoHighLevel"],
       img: "/workflows/FB-AI-Agent.jpg",
       short: "AI-driven workflow that responds instantly to leads and organizes data.",
       full: "This automation handles lead intake, routes data into CRM, and replies instantly.",
     },
     {
       title: "GHL Website + AI Chatbot Integration",
+      category: ["GoHighLevel"],
       img: "/workflows/GHL-Website-with-ai-chat.jpg",
       short: "High-converting website with a fully embedded AI health assistant.",
       full: "Built an optimized GoHighLevel website and integrated an AI assistant.",
     },
     {
       title: "GHL Sales Funnel – High-Converting Build",
+      category: ["GoHighLevel"],
       images: [
         "/workflows/GHLSalesFunnel/GHLSalesFunnel.svg",
         "/workflows/GHLSalesFunnel/GHLReceipt.svg",
@@ -66,6 +70,7 @@ export default function Work() {
     },
     {
         title: "PH Lead Generation Automation – Google Maps API",
+        category: ["n8n","Lead Generation"],
         images: [
           "/LeadGenPh.svg"
         ],
@@ -73,6 +78,108 @@ export default function Work() {
         full: "This automation gathers PH-based business leads (such as dental clinics and service providers) using Google Maps APIs. It automatically extracts business name, phone number, website, and Place ID for deduplication.\n\nHow it works:\n\n1. A query generator builds search terms for targeted PH cities.\n2. The Google Maps TextSearch API returns matching businesses.\n3. The Place Details API enriches each result with contact information.\n4. Custom dedupe logic prevents adding the same clinic twice.\n5. New leads are appended to Google Sheets for easy CRM import.\n6. A daily schedule keeps the lead list updated.\n\nThis workflow is designed for scalable lead generation across multiple Philippine cities."
 
 
+      },
+      {
+        title: "AI Content Repurposing Automation – Zapier",
+        category: ["Zapier","AI Agents"],
+        images: [
+          "/workflows/AI_content_repurposing_zapier.jpg"
+        ],
+        short: "AI pipeline that converts uploaded content into multiple social media posts automatically.",
+        full: `This automation transforms long-form content into ready-to-publish social media posts using AI.
+
+        The system monitors a Google Drive folder for newly uploaded media files such as videos or recordings. Once a new file is detected, the workflow automatically begins processing the content.
+
+        Workflow architecture:
+
+        1. Google Drive Trigger  
+          Detects newly uploaded content files.
+
+        2. File Filtering  
+          Ensures only supported media types are processed.
+
+        3. AI Transcription  
+          The audio from the file is automatically transcribed into text.
+
+        4. AI Content Generation  
+          The transcription is converted into blog posts and social media content.
+
+        5. Content Routing via Zapier Paths  
+          The workflow splits into multiple distribution channels.
+
+        6. LinkedIn Publishing  
+          Automatically generates and posts a LinkedIn update.
+
+        7. Facebook Page Publishing  
+          Creates formatted Facebook posts ready for audience engagement.
+
+        This system enables businesses to repurpose a single piece of content into multiple marketing assets without manual work.
+
+        Key Benefits:
+
+        • Eliminates manual content repurposing  
+        • Reduces content production time  
+        • Ensures consistent multi-platform publishing  
+        • Scales marketing output from a single source
+
+        Technologies Used:
+
+        Zapier  
+        AI by Zapier  
+        Google Drive  
+        LinkedIn API  
+        Facebook Pages API`
+      },
+      {
+        title: "Asana CRM Lead Engagement Workflow – Zapier",
+        category: ["Zapier","CRM"],
+        images: [
+          "/workflows/Asana_CRM_Lead_Engagement_Workflow.jpg"
+        ],
+        short: "Automated CRM pipeline that manages lead engagement and follow-ups based on task status.",
+        full: `This automation acts as a CRM engagement engine built around Asana task statuses.
+
+        Whenever a task representing a lead is updated in Asana, the system automatically evaluates the pipeline stage and triggers the appropriate engagement workflow.
+
+        Workflow structure:
+
+        Trigger:
+        Asana Task Updated
+
+        The workflow then splits into multiple automation paths based on the task stage.
+
+        Pipeline Stages:
+
+        1. Ready to Start  
+        When a lead enters the pipeline, the system automatically creates a dedicated lead folder in Google Drive and generates a new Asana task for marketing preparation.
+
+        2. No Response  
+        If a lead does not respond, the automation sends a follow-up email after a delay to re-engage the prospect.
+
+        3. Quoted  
+        When a quote is sent, the system triggers automated follow-up reminders to ensure the lead continues through the sales process.
+
+        4. Approved  
+        Once the client approves the quote, the automation retrieves the project PDF and sends a personalized onboarding email.
+
+        5. Paid and Closed  
+        When a deal closes, AI analyzes the engagement data and automatically sends a recommendation or upsell email.
+
+        Core Automation Features:
+
+        • Automated lead lifecycle management  
+        • Intelligent email follow-up sequences  
+        • CRM pipeline stage automation  
+        • Document retrieval and onboarding workflows  
+        • AI-powered engagement analysis
+
+        Technologies Used:
+
+        Zapier  
+        Asana  
+        Gmail  
+        Google Drive  
+        AI by Zapier`
       },
   ];
 
@@ -166,9 +273,23 @@ export default function Work() {
         </button>
       </div>
 
+      <div className={styles.filterBar}>
+        {["All","n8n","Zapier","GoHighLevel"].map((cat)=>(
+          <button
+            key={cat}
+            className={`${styles.filterBtn} ${filter === cat ? styles.activeFilter : ""}`}
+            onClick={()=>setFilter(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       {/* GRID */}
       <div className={styles.grid}>
-        {works.map((item, idx) => {
+        {works
+          .filter((item) => filter === "All" || item.category?.includes(filter))
+          .map((item, idx) => {
           const imgs = getImages(item);
           const index = cardIndices[idx] ?? 0;
 
@@ -212,6 +333,11 @@ export default function Work() {
               </div>
 
               <h3>{item.title}</h3>
+
+              {item.category && (
+                <span className={styles.category}>{item.category}</span>
+              )}
+
               <p className={styles.cardText}>{item.short}</p>
             </div>
           );
