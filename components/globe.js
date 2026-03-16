@@ -62,6 +62,7 @@ export default function Globe({
   onExperience,
   onTools,
   onSchedule,
+  onLoaded,
 }) {
   const shouldRotate = useRef(true)
   const mouse = useRef([0, 0])
@@ -69,6 +70,14 @@ export default function Globe({
   useEffect(() => {
     shouldRotate.current = !isPopupOpen
   }, [isPopupOpen])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onLoaded?.()
+    }, 800)
+
+    return () => clearTimeout(timer)
+  }, [onLoaded])
 
   return (
     <Canvas

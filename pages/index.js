@@ -29,6 +29,7 @@ export default function Home() {
   const [showSkills, setShowSkills] = useState(false)
   const [showExperience, setShowExperience] = useState(false)
   const [showTools, setShowTools] = useState(false)
+  const [globeLoaded, setGlobeLoaded] = useState(false)
   const [globeSize, setGlobeSize] = useState(1)
   const [calendlyOpen, setCalendlyOpen] = useState(false)
 
@@ -108,7 +109,14 @@ export default function Home() {
       <div style={styles.backgroundLayer} />
 
       {/* 3D CANVAS */}
-      <div style={styles.canvasLayer}>
+      <div
+        style={{
+          ...styles.canvasLayer,
+          filter: globeLoaded ? "blur(0px)" : "blur(10px)",
+          opacity: globeLoaded ? 1 : 0.4,
+          transition: "filter 1s ease, opacity 1s ease",
+        }}
+      >
         <Globe
           size={globeSize}
           isPopupOpen={showAbout || showSkills || showExperience || showTools}
@@ -117,6 +125,7 @@ export default function Home() {
           onExperience={() => setShowExperience(true)}
           onTools={() => setShowTools(true)}
           onSchedule={expandCalendly}
+          onLoaded={() => setGlobeLoaded(true)}
         />
       </div>
 
