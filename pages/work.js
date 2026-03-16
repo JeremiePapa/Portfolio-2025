@@ -70,7 +70,7 @@ export default function Work() {
     },
     {
         title: "PH Lead Generation Automation – Google Maps API",
-        category: ["n8n","Lead Generation"],
+        category: ["n8n"],
         images: [
           "/LeadGenPh.svg"
         ],
@@ -81,7 +81,7 @@ export default function Work() {
       },
       {
         title: "AI Content Repurposing Automation – Zapier",
-        category: ["Zapier","AI Agents"],
+        category: ["Zapier"],
         images: [
           "/workflows/AI_content_repurposing_zapier.jpg"
         ],
@@ -132,7 +132,7 @@ export default function Work() {
       },
       {
         title: "Asana CRM Lead Engagement Workflow – Zapier",
-        category: ["Zapier","CRM"],
+        category: ["Zapier"],
         images: [
           "/workflows/Asana_CRM_Lead_Engagement_Workflow.jpg"
         ],
