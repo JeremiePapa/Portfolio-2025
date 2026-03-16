@@ -43,7 +43,7 @@ export default function Work() {
   const works = [
     {
       title: "AI Agent Workflow – Facebook Messenger",
-      category: ["GoHighLevel"],
+      category: ["n8n"],
       img: "/workflows/FB-AI-Agent.jpg",
       short: "AI-driven workflow that responds instantly to leads and organizes data.",
       full: "This automation handles lead intake, routes data into CRM, and replies instantly.",
