@@ -10,6 +10,14 @@ export default function Work() {
   const [cardAnimDirection, setCardAnimDirection] = useState({}); // animation per card
   const [popupAnimDirection, setPopupAnimDirection] = useState(null); // popup fade direction
   const [filter, setFilter] = useState("All");
+  // Zoom viewer state
+  const [zoomImage, setZoomImage] = useState(null);
+  const [scale, setScale] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [lastDistance, setLastDistance] = useState(null);
+  
 
   // Load theme
   useEffect(() => {
@@ -28,6 +36,14 @@ export default function Work() {
     document.body.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (zoomImage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [zoomImage]);
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
@@ -78,6 +94,53 @@ export default function Work() {
         full: "This automation gathers PH-based business leads (such as dental clinics and service providers) using Google Maps APIs. It automatically extracts business name, phone number, website, and Place ID for deduplication.\n\nHow it works:\n\n1. A query generator builds search terms for targeted PH cities.\n2. The Google Maps TextSearch API returns matching businesses.\n3. The Place Details API enriches each result with contact information.\n4. Custom dedupe logic prevents adding the same clinic twice.\n5. New leads are appended to Google Sheets for easy CRM import.\n6. A daily schedule keeps the lead list updated.\n\nThis workflow is designed for scalable lead generation across multiple Philippine cities."
 
 
+      },
+      {
+        title: "AI Video Automation – Veo3 + Social Publishing",
+        category: ["n8n"],
+        images: [
+          "/workflows/ai-video-automation.png"
+        ],
+        short: "Fully automated pipeline that generates AI videos and publishes to Facebook Reels and YouTube Shorts.",
+        full: `This automation generates and distributes short-form video content end-to-end using n8n and AI.
+
+      Workflow Architecture:
+
+      1. AI Prompt Generation  
+      Gemini generates structured prompts for video creation.
+
+      2. Authentication Layer  
+      JWT is created and exchanged for an access token to securely call the Veo3 API.
+
+      3. Video Generation (Veo3)  
+      The system submits the prompt and starts an asynchronous video generation job.
+
+      4. Polling System  
+      A wait-and-check loop continuously monitors the job status until completion.
+
+      5. Validation & Error Handling  
+      Ensures failed or incomplete jobs are handled safely before proceeding.
+
+      6. Multi-Platform Publishing  
+      The final video is automatically uploaded to:
+      • Facebook Reels  
+      • YouTube Shorts  
+
+      Key Features:
+
+      • Fully automated (idea → video → publish)  
+      • Async-safe polling architecture  
+      • Modular and scalable workflow design  
+      • Ready for high-volume content generation  
+
+      Technologies Used:
+
+      n8n  
+      Google Gemini  
+      JWT Authentication  
+      Veo3 API  
+      Facebook Graph API  
+      YouTube Data API`
       },
       {
         title: "AI Content Repurposing Automation – Zapier",
@@ -240,6 +303,84 @@ export default function Work() {
     setActiveImage((p) => (p === imgs.length - 1 ? 0 : p + 1));
   };
 
+  // Zoom handlers
+  const handleWheel = (e) => {
+    e.preventDefault();
+
+    const zoomSpeed = 0.1;
+    const newScale =
+      e.deltaY < 0 ? scale + zoomSpeed : scale - zoomSpeed;
+
+    setScale(Math.min(Math.max(newScale, 1), 4));
+  };
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartPos({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || scale === 1) return;
+
+    setPosition({
+      x: e.clientX - startPos.x,
+      y: e.clientY - startPos.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+    // 👇 ADD HERE (RIGHT BELOW)
+
+    // Touch helpers
+    const getDistance = (touches) => {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        setIsDragging(true);
+        setStartPos({
+          x: touch.clientX - position.x,
+          y: touch.clientY - position.y,
+        });
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length === 2) {
+        const dist = getDistance(e.touches);
+
+        if (lastDistance) {
+          const delta = dist - lastDistance;
+          setScale((s) =>
+            Math.min(Math.max(s + delta * 0.005, 1), 4)
+          );
+        }
+
+        setLastDistance(dist);
+      } else if (isDragging && scale > 1) {
+        const touch = e.touches[0];
+        setPosition({
+          x: touch.clientX - startPos.x,
+          y: touch.clientY - startPos.y,
+        });
+      }
+    };
+
+    const handleTouchEnd = () => {
+      setIsDragging(false);
+      setLastDistance(null);
+    };
+  
   // Keyboard navigation
   useEffect(() => {
     if (activeIndex === null) return;
@@ -288,43 +429,48 @@ export default function Work() {
       {/* GRID */}
       <div className={styles.grid}>
         {works
-          .filter((item) => filter === "All" || item.category?.includes(filter))
-          .map((item, idx) => {
+          .map((item, originalIndex) => ({ item, originalIndex })) // preserve index
+          .filter(({ item }) => filter === "All" || item.category?.includes(filter))
+          .map(({ item, originalIndex }) => {
           const imgs = getImages(item);
-          const index = cardIndices[idx] ?? 0;
+          const index = cardIndices[originalIndex] ?? 0;
 
           return (
             <div
               key={item.title}
               className={styles.card}
-              onClick={() => openPopup(idx)}
+              onClick={() => openPopup(originalIndex)}
               onTouchStart={onTouchStart}
-              onTouchEnd={(e) => onTouchEndCard(idx, e)}
+              onTouchEnd={(e) => onTouchEndCard(originalIndex, e)}
             >
               <div className={styles.cardImageWrapper}>
                 
-                {/* Arrows only for multi-image cards */}
                 {imgs.length > 1 && (
-                  <button className={styles.cardArrowLeft} onClick={(e) => cardPrev(idx, e)}>
+                  <button
+                    className={styles.cardArrowLeft}
+                    onClick={(e) => cardPrev(originalIndex, e)}
+                  >
                     ‹
                   </button>
                 )}
 
                 {imgs.length > 1 && (
-                  <button className={styles.cardArrowRight} onClick={(e) => cardNext(idx, e)}>
+                  <button
+                    className={styles.cardArrowRight}
+                    onClick={(e) => cardNext(originalIndex, e)}
+                  >
                     ›
                   </button>
                 )}
 
-                {/* Correct fade animation ONLY if multiple images */}
                 <img
                   src={imgs[index]}
                   alt={item.title}
                   className={`${styles.cardImage} ${
                     imgs.length > 1
-                      ? cardAnimDirection[idx] === "left"
+                      ? cardAnimDirection[originalIndex] === "left"
                         ? styles.slideFadeLeftEnter
-                        : cardAnimDirection[idx] === "right"
+                        : cardAnimDirection[originalIndex] === "right"
                         ? styles.slideFadeRightEnter
                         : ""
                       : ""
@@ -364,6 +510,12 @@ export default function Work() {
               <img
                 key={activeImage}
                 src={getImages(works[activeIndex])[activeImage]}
+                onClick={() => {
+                  setZoomImage(getImages(works[activeIndex])[activeImage]);
+                  setScale(1);
+                  setPosition({ x: 0, y: 0 });
+                }}
+                style={{ cursor: "zoom-in" }}
                 className={`${styles.popupImage} ${
                   popupAnimDirection === "left"
                     ? styles.slideFadeLeftEnter
@@ -400,10 +552,73 @@ export default function Work() {
                 Close
               </button>
             </div>
+            
           </div>
         </div>
+        
       )}
+              {zoomImage && (
+                <div
+                  onWheel={handleWheel}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                  onClick={(e) => {
+                    if (!isDragging) setZoomImage(null);
+                  }}
 
+                  // ✅ ADD MOBILE SUPPORT
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+
+                  style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "100vh",
+                    background: "rgba(0,0,0,0.9)",
+                    backdropFilter: "blur(8px)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 9999,
+                    overflow: "hidden",
+                    cursor: isDragging ? "grabbing" : "grab",
+                  }}
+                >
+                  <img
+                    src={zoomImage}
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      handleMouseDown(e);
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+
+                    // 👇 ADD THIS LINE
+                    onDoubleClick={() => {
+                      setScale(1);
+                      setPosition({ x: 0, y: 0 });
+                    }}
+
+                    draggable={false}
+                    style={{
+                      transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+                      transition: isDragging ? "none" : "transform 0.1s ease",
+                      userSelect: "none",
+
+                      maxWidth: "calc(100vw - 40px)",
+                      maxHeight: "calc(100vh - 40px)",
+                      objectFit: "contain",
+                      borderRadius: "12px",
+                      boxShadow: "0 0 40px rgba(0,0,0,0.8)",
+                    }}
+                  />
+                </div>
+              )}
     </div>
+    
   );
+  
 }
