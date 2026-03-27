@@ -107,7 +107,7 @@ export default function GlobeButtons({
       />
 
       <GlowButton
-        label="Skills"
+        label="Impact"
         position={[-1 * pos, 0.05 * pos, 0]}
         scale={sz}
         onClick={onSkills}
