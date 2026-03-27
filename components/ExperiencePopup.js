@@ -15,45 +15,64 @@ export default function ExperiencePopup({ onClose }) {
         maxWidth: "90vw",
         color: "white",
         backdropFilter: "blur(10px)",
-        textAlign: "center",
         fontFamily: "Poppins, sans-serif",
       }}
     >
-      <h2 style={{ marginBottom: "10px" }}>Experience</h2>
+      <h2 style={{ marginBottom: "15px", textAlign: "center" }}>
+        Experience
+      </h2>
 
-      <p style={{ fontSize: "15px", lineHeight: "1.6", marginBottom: "20px", textAlign: "left" }}>
-        • Automation workflows (AI Agents, n8n, GHL) <br />
-        • GHL funnel building (landing page, pricing, checkout, receipts) <br />
-        • GHL chatbot + appointment integrations <br />
-        • API integrations & lead routing automation <br />
-        • Smart chatbot systems using LLMs <br />
-        • Full-stack web development for clients <br />
-      </p>
+      <div
+        style={{
+          fontSize: "14px",
+          lineHeight: "1.8",
+          textAlign: "left",
+          marginBottom: "20px",
+        }}
+      >
+        <b>Automation & AI Systems</b><br />
+        🔹 n8n workflow automation<br />
+        🔹 AI agents & voice systems (VAPI)<br />
+        🔹 Scheduling, lead routing, CRM automation<br /><br />
 
-      {/* SEE MY WORK BUTTON */}
+        <b>GoHighLevel (GHL)</b><br />
+        🔹 Funnel building (landing, pricing, checkout)<br />
+        🔹 Chatbots & appointment integrations<br />
+        🔹 CRM pipelines and automation<br /><br />
+
+        <b>Integrations & Backend</b><br />
+        🔹 API integrations & webhooks<br />
+        🔹 Google Sheets, Supabase, external APIs<br />
+        🔹 Data pipelines & automation logic<br /><br />
+
+        <b>Web Development</b><br />
+        🔹 Frontend UI (React / Next.js)<br />
+        🔹 Portfolio systems & client projects<br />
+      </div>
+
       <a
         href="/work"
         style={{
-          display: "inline-block",
-          padding: "10px 20px",
+          display: "block",
+          padding: "12px",
           background: "#2a58ff",
           borderRadius: "10px",
           color: "white",
           fontSize: "15px",
           textDecoration: "none",
-          cursor: "pointer",
-          marginBottom: "15px",
+          textAlign: "center",
+          marginBottom: "12px",
+          fontWeight: "500",
         }}
       >
-        See My Work →
+        View My Work →
       </a>
-
-      <br />
 
       <button
         onClick={onClose}
         style={{
-          padding: "10px 20px",
+          width: "100%",
+          padding: "10px",
           background: "rgba(255,255,255,0.2)",
           border: "none",
           borderRadius: "10px",

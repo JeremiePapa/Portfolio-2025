@@ -18,15 +18,16 @@ const Globe = dynamic(() => import("../components/globe"), {
     </div>
   )
 })
+
 const AboutPopup = dynamic(() => import("../components/AboutPopup"), { ssr: false })
-const SkillsPopup = dynamic(() => import("../components/SkillsPopup"), { ssr: false })
+const ImpactPopup = dynamic(() => import("../components/ImpactPopup"), { ssr: false })
 const CalendlyBubble = dynamic(() => import("../components/CalendlyBubble"), { ssr: false })
 const ExperiencePopup = dynamic(() => import("../components/ExperiencePopup"), { ssr: false })
 const ToolsPopup = dynamic(() => import("../components/ToolsPopup"), { ssr: false })
 
 export default function Home() {
   const [showAbout, setShowAbout] = useState(false)
-  const [showSkills, setShowSkills] = useState(false)
+  const [showImpact, setShowImpact] = useState(false)
   const [showExperience, setShowExperience] = useState(false)
   const [showTools, setShowTools] = useState(false)
   const [globeLoaded, setGlobeLoaded] = useState(false)
@@ -36,12 +37,12 @@ export default function Home() {
   const expandCalendly = () => setCalendlyOpen(true)
   const collapseCalendly = () => setCalendlyOpen(false)
 
-  // ✅ 1) Preload images (about photo + logos + earth) once on mount
+  // ✅ Preload images
   useEffect(() => {
     const imagesToPreload = [
-      "/me.svg",              // your about/avatar photo
-      "/logos/earth2.webp",         // globe texture copy in /logos (optional)
-      "/earth2.webp",               // actual globe texture
+      "/me.svg",
+      "/logos/earth2.webp",
+      "/earth2.webp",
       "/logos/chatgpt-6.svg",
       "/logos/Google-gemini-icon.webp",
       "/logos/claude-logo.svg",
@@ -56,30 +57,27 @@ export default function Home() {
       "/logos/vercel.svg",
     ]
 
-      imagesToPreload.forEach((src) => {
-        const img = new Image()
-        img.src = src
-      })
+    imagesToPreload.forEach((src) => {
+      const img = new Image()
+      img.src = src
+    })
 
-      // 🔥 Force browser to cache globe texture early
-      const texture = new Image()
-      texture.src = "/earth2.webp"
+    const texture = new Image()
+    texture.src = "/earth2.webp"
 
-      // 🔥 Warm up fetch cache
-      fetch("/earth2.webp")
+    fetch("/earth2.webp")
+  }, [])
 
-    }, [])
-
-  // ✅ 2) Preload popup components so first click feels instant
+  // ✅ Preload components
   useEffect(() => {
     import("../components/globe")
     AboutPopup.preload?.()
-    SkillsPopup.preload?.()
+    ImpactPopup.preload?.() // ✅ FIXED
     ExperiencePopup.preload?.()
     ToolsPopup.preload?.()
   }, [])
 
-  // Handle responsive globe scale
+  // Responsive globe
   useEffect(() => {
     const resize = () => {
       const w = window.innerWidth
@@ -100,7 +98,6 @@ export default function Home() {
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
           rel="stylesheet"
         />
-        {/* ✅ Preload a few critical images */}
         <link rel="preload" as="image" href="/earth2.webp" />
         <link rel="preload" as="image" href="/me.svg" />
       </Head>
@@ -119,9 +116,9 @@ export default function Home() {
       >
         <Globe
           size={globeSize}
-          isPopupOpen={showAbout || showSkills || showExperience || showTools}
+          isPopupOpen={showAbout || showImpact || showExperience || showTools} // ✅ FIXED
           onAbout={() => setShowAbout(true)}
-          onSkills={() => setShowSkills(true)}
+          onSkills={() => setShowImpact(true)} // ✅ keep Globe unchanged
           onExperience={() => setShowExperience(true)}
           onTools={() => setShowTools(true)}
           onSchedule={expandCalendly}
@@ -138,10 +135,10 @@ export default function Home() {
         </div>
       )}
 
-      {showSkills && (
-        <div style={styles.popupOverlay} onClick={() => setShowSkills(false)}>
+      {showImpact && (
+        <div style={styles.popupOverlay} onClick={() => setShowImpact(false)}>
           <div style={styles.aboutPopup} onClick={(e) => e.stopPropagation()}>
-            <SkillsPopup onClose={() => setShowSkills(false)} />
+            <ImpactPopup onClose={() => setShowImpact(false)} />
           </div>
         </div>
       )}
@@ -162,7 +159,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* SCHEDULE BUBBLE */}
+      {/* SCHEDULE */}
       <CalendlyBubble
         calendlyOpen={calendlyOpen}
         onExpand={expandCalendly}

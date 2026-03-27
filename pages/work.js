@@ -65,24 +65,50 @@ export default function Work() {
       full: "This automation handles lead intake, routes data into CRM, and replies instantly.",
     },
     {
-      title: "GHL Website + AI Chatbot Integration",
-      category: ["GoHighLevel"],
-      img: "/workflows/GHL-Website-with-ai-chat.jpg",
-      short: "High-converting website with a fully embedded AI health assistant.",
-      full: "Built an optimized GoHighLevel website and integrated an AI assistant.",
-    },
-    {
-      title: "GHL Sales Funnel – High-Converting Build",
-      category: ["GoHighLevel"],
+      title: "AI Appointment Scheduling System (n8n + VAPI + Google Calendar)",
+      category: ["n8n"],
       images: [
-        "/workflows/GHLSalesFunnel/GHLSalesFunnel.svg",
-        "/workflows/GHLSalesFunnel/GHLReceipt.svg",
-        "/workflows/GHLSalesFunnel/GHLPricing.svg",
-        "/workflows/GHLSalesFunnel/GHLLandingPage.svg",
-        "/workflows/GHLSalesFunnel/GHLCheckout.svg",
+        "/workflows/ai-appointment-system.jpg" // <-- rename to your actual image path
       ],
-      short: "Complete GHL sales funnel including landing page, pricing, checkout.",
-      full: "This high-converting funnel streamlined onboarding and automated receipts.",
+      short: "AI-powered scheduling system that automates booking, rescheduling, and cancellations via voice agents.",
+      full: `This is a production-grade AI appointment scheduling system built using n8n, VAPI, and Google Calendar.
+
+    It automates the full scheduling lifecycle including availability checking, booking, rescheduling, cancellations, and post-call summaries.
+
+    Workflow Architecture:
+
+    1. GetSlots (Availability Checker)
+    - Validates requested time against Google Calendar
+    - Returns available time ranges
+
+    2. BookSlots (Create Appointment)
+    - Converts input into structured payload
+    - Handles timezone normalization
+    - Creates calendar events with error handling
+
+    3. UpdateSlots (Reschedule Appointment)
+    - Finds existing bookings
+    - Updates event details safely
+
+    4. CancelSlots (Cancel Appointment)
+    - Locates and deletes events
+    - Confirms cancellation
+
+    5. Call Result (Post-call Summary)
+    - Logs call outcomes for tracking and optimization
+
+    Key Features:
+    • Fully automated scheduling (no human needed)
+    • Real-time calendar validation
+    • Voice AI integration via VAPI
+    • Modular and scalable workflow design
+
+    Tech Stack:
+    n8n
+    VAPI
+    Google Calendar API
+    Webhooks
+    JavaScript`
     },
     {
         title: "PH Lead Generation Automation – Google Maps API",
@@ -142,6 +168,27 @@ export default function Work() {
       Facebook Graph API  
       YouTube Data API`
       },
+    {
+      title: "GHL Website + AI Chatbot Integration",
+      category: ["GoHighLevel"],
+      img: "/workflows/GHL-Website-with-ai-chat.jpg",
+      short: "High-converting website with a fully embedded AI health assistant.",
+      full: "Built an optimized GoHighLevel website and integrated an AI assistant.",
+    },
+    {
+      title: "GHL Sales Funnel – High-Converting Build",
+      category: ["GoHighLevel"],
+      images: [
+        "/workflows/GHLSalesFunnel/GHLSalesFunnel.svg",
+        "/workflows/GHLSalesFunnel/GHLReceipt.svg",
+        "/workflows/GHLSalesFunnel/GHLPricing.svg",
+        "/workflows/GHLSalesFunnel/GHLLandingPage.svg",
+        "/workflows/GHLSalesFunnel/GHLCheckout.svg",
+      ],
+      short: "Complete GHL sales funnel including landing page, pricing, checkout.",
+      full: "This high-converting funnel streamlined onboarding and automated receipts.",
+    },
+    
       {
         title: "AI Content Repurposing Automation – Zapier",
         category: ["Zapier"],

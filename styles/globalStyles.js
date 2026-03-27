@@ -89,6 +89,7 @@ const styles = {
   },
 
 aboutText: {
+  textAlign: "justify",
   fontSize: "15px",
   lineHeight: "1.5",
   marginBottom: "20px",
