@@ -291,6 +291,32 @@ export default function Work() {
         Google Drive  
         AI by Zapier`
       },
+      {
+        title: "Interactive Certificate Generator (Canvas + Claude AI-Assisted Development)",
+        category: ["Web App"],
+        images: [
+          "/workflows/certificate-generator.jpg" // <-- replace with your actual image path
+        ],
+        short: "Dynamic certificate generator with real-time preview and image export.",
+        full: `A web-based certificate generator built using HTML5 Canvas and JavaScript.
+
+        Users can input a name and completion date, preview a styled certificate in real time, and export it as a high-quality image.
+
+        This project was developed using AI-assisted workflows (Claude), which accelerated the initial HTML structure. The system was then extended with custom JavaScript logic for rendering, positioning, and export functionality.
+
+        Key Features:
+        • Dynamic name & date injection  
+        • Real-time preview rendering  
+        • Pixel-accurate canvas positioning  
+        • One-click JPG export  
+        • Fully client-side (no backend required)
+
+        Tech Stack:
+        JavaScript (Vanilla)  
+        HTML5 Canvas API  
+        CSS  
+        Claude (AI-assisted development)`
+        }
   ];
 
   // Swipe support
@@ -462,7 +488,7 @@ export default function Work() {
       </div>
 
       <div className={styles.filterBar}>
-        {["All","n8n","Zapier","GoHighLevel"].map((cat)=>(
+        {["All","n8n","Zapier","GoHighLevel","Web App"].map((cat)=>(
           <button
             key={cat}
             className={`${styles.filterBtn} ${filter === cat ? styles.activeFilter : ""}`}
