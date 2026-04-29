@@ -15,8 +15,8 @@ export default function StarField({ mouse }) {
 
   return (
     <group ref={starGroup} position={[0, 0, 2]}>
-      <TwinklingStars count={1500} spread={40} />
-      <TwinklingStars count={1000} spread={50} />
+      <TwinklingStars count={1500} spread={40} mouse={mouse} />
+      <TwinklingStars count={1000} spread={50} mouse={mouse} />
     </group>
   )
 }

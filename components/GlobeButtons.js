@@ -66,8 +66,8 @@ function GlowButton({ label, position, onClick, scale }) {
           <planeGeometry args={[1.67, 0.62]} />
           <meshBasicMaterial
             transparent
-            color={hovered ? "#0004ffff" : "#3bf7ff"}
-            opacity={hovered ? .9 : .2}
+            color={hovered ? "#0004ff" : "#3bf7ff"}
+            opacity={hovered ? 0.9 : 0.2}
           />
         </mesh>
 

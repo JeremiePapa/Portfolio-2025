@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import Head from "next/head"
+import { Poppins } from "next/font/google"
 import styles from "../styles/globalStyles"
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "600"],
+  display: "swap",
+})
 
 const Globe = dynamic(() => import("../components/globe"), {
   ssr: false,
@@ -92,15 +99,13 @@ export default function Home() {
   }, [])
 
   return (
-    <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
-          rel="stylesheet"
-        />
-        <link rel="preload" as="image" href="/earth2.webp" />
-        <link rel="preload" as="image" href="/me.svg" />
-      </Head>
+      <div className={poppins.className}>
+        <Head>
+          <link rel="preload" as="image" href="/earth2.webp" />
+          <link rel="preload" as="image" href="/me.svg" />
+        </Head>
+      
+        
 
       {/* BACKGROUND */}
       <div style={styles.backgroundLayer} />
@@ -165,6 +170,6 @@ export default function Home() {
         onExpand={expandCalendly}
         onCollapse={collapseCalendly}
       />
-    </>
+    </div>
   )
 }

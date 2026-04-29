@@ -109,7 +109,11 @@ export default function FloatingTitle() {
           bevelSegments={4}
         >
           3D Portfolio
-          <meshStandardMaterial color="#2a0e7cff" />
+          <meshStandardMaterial
+            color="#2a0e7c"
+            transparent
+            opacity={0.5}
+          />
         </Text3D>
 
         {/* SHIMMER TEXT */}

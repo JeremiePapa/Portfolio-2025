@@ -100,7 +100,7 @@ export default function Globe({
       <Stars
         radius={120}
         depth={1}
-        count={500}
+        count={10}
         factor={5.5}
         saturation={.5}
         fade
