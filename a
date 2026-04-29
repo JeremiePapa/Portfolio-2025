@@ -1,0 +1,37 @@
+[1mdiff --git a/components/StarField.js b/components/StarField.js[m
+[1mindex 023cd10..aad9434 100644[m
+[1m--- a/components/StarField.js[m
+[1m+++ b/components/StarField.js[m
+[36m@@ -15,8 +15,8 @@[m [mexport default function StarField({ mouse }) {[m
+ [m
+   return ([m
+     <group ref={starGroup} position={[0, 0, 2]}>[m
+[31m-      <TwinklingStars count={1500} spread={40} mouse={mouse} />[m
+[31m-      <TwinklingStars count={1000} spread={50} mouse={mouse} />[m
+[32m+[m[32m      <TwinklingStars count={700} spread={40} mouse={mouse} />[m
+[32m+[m[32m      <TwinklingStars count={500} spread={50} mouse={mouse} />[m
+     </group>[m
+   )[m
+ }[m
+[1mdiff --git a/components/globe.js b/components/globe.js[m
+[1mindex c430555..20d518e 100644[m
+[1m--- a/components/globe.js[m
+[1m+++ b/components/globe.js[m
+[36m@@ -32,7 +32,7 @@[m [mfunction GlobeMesh({ size, shouldRotate }) {[m
+ [m
+   return ([m
+     <mesh ref={globeRef}>[m
+[31m-      <sphereGeometry args={[1, 64, 64]} />[m
+[32m+[m[32m      <sphereGeometry args={[1, 32, 32]} />[m
+       <meshStandardMaterial map={texture} roughness={0.9} metalness={0.1} />[m
+     </mesh>[m
+   )[m
+[36m@@ -82,7 +82,7 @@[m [mexport default function Globe({[m
+   return ([m
+     <Canvas[m
+       camera={{ position: [0, 0, 6] }}[m
+[31m-      dpr={[1, 1.5]}[m
+[32m+[m[32m      dpr={[1]}[m
+       gl={{ antialias: true }}[m
+       onPointerMove={(e) => {[m
+         const x = (e.clientX / window.innerWidth) * 2 - 1[m

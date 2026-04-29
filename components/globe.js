@@ -32,7 +32,7 @@ function GlobeMesh({ size, shouldRotate }) {
 
   return (
     <mesh ref={globeRef}>
-      <sphereGeometry args={[1, 64, 64]} />
+      <sphereGeometry args={[1, 32, 32]} />
       <meshStandardMaterial map={texture} roughness={0.9} metalness={0.1} />
     </mesh>
   )
@@ -82,7 +82,7 @@ export default function Globe({
   return (
     <Canvas
       camera={{ position: [0, 0, 6] }}
-      dpr={[1, 1.5]}
+      dpr={[1]}
       gl={{ antialias: true }}
       onPointerMove={(e) => {
         const x = (e.clientX / window.innerWidth) * 2 - 1
