@@ -1,5 +1,5 @@
 // components/FloatingTitle.js
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Text3D, Center } from "@react-three/drei";
 import * as THREE from "three";
@@ -41,7 +41,8 @@ export default function FloatingTitle() {
 
 
   // ⭐ SHIMMER MATERIAL
-  const ShimmerShader = new THREE.ShaderMaterial({
+  const ShimmerShader = useMemo(() => {
+  return new THREE.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
       uActive: { value: 1 },
@@ -50,6 +51,7 @@ export default function FloatingTitle() {
     },
     vertexShader: `
       varying vec3 vPos;
+
       void main() {
         vPos = position;
         gl_Position =
@@ -66,16 +68,14 @@ export default function FloatingTitle() {
       varying vec3 vPos;
 
       void main() {
-        // ⭐ Sweep starts from right → left
         float diagonal = (-vPos.x * 1.0 + vPos.y * 1.2 + 1.5);
-
         float sweep = sin(diagonal + uTime * 2.0);
 
-        // thin streak
         float thinBand = smoothstep(0.15, 0.25, sweep);
-
-        // sparkle
-        float sparkle = pow(smoothstep(0.7, 1.0, sweep), 6.0);
+        float sparkle = pow(
+          smoothstep(0.7, 1.0, sweep),
+          6.0
+        );
 
         vec3 finalColor = baseColor;
 
@@ -83,10 +83,10 @@ export default function FloatingTitle() {
         finalColor += highlight * sparkle * 1.0 * uActive;
 
         gl_FragColor = vec4(finalColor, 1.0);
-    }
-
+      }
     `,
   });
+}, []);
 
   shimmerMaterial.current = ShimmerShader;
 
