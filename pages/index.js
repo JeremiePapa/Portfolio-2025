@@ -4,6 +4,8 @@ import Head from "next/head"
 import { Poppins } from "next/font/google"
 import styles from "../styles/globalStyles"
 
+
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "600"],
@@ -101,6 +103,34 @@ export default function Home() {
   return (
       <div className={poppins.className}>
         <Head>
+          <title>Jeremie Papa | AI Automation Engineer</title>
+
+          <meta
+            name="description"
+            content="AI Automation Engineer specializing in n8n, GoHighLevel, VAPI, Supabase, CRM automation, and scalable business systems."
+          />
+
+          <meta
+            name="keywords"
+            content="n8n, GoHighLevel, AI Automation, VAPI, Supabase, CRM, Workflow Automation, Portfolio"
+          />
+
+          <meta name="author" content="Jeremie Papa" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+          <meta
+            property="og:title"
+            content="Jeremie Papa | AI Automation Engineer"
+          />
+
+          <meta
+            property="og:description"
+            content="Portfolio showcasing AI automation systems using n8n, GoHighLevel, VAPI, and CRM workflows."
+          />
+
+          <meta property="og:type" content="website" />
+          <meta property="og:image" content="/Portfolio.jpg" />
+
           <link rel="preload" as="image" href="/earth2.webp" />
           <link rel="preload" as="image" href="/me.svg" />
         </Head>
